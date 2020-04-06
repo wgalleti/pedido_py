@@ -11,7 +11,7 @@ class ItemPedidoSerializer(serializers.ModelSerializer):
 
 class PedisoSerializer(serializers.ModelSerializer):
     # items_display = serializers.SerializerMethodField('get_item')
-    itens = ItemPedidoSerializer()
+    #itens = ItemPedidoSerializer()
 
     class Meta:
         model = Pedidos
