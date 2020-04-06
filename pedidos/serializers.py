@@ -1,5 +1,5 @@
-from drf_writable_nested import WritableNestedModelSerializer
 from rest_framework import serializers
+
 from .models import Pedidos, ItensPedido
 
 
@@ -10,13 +10,16 @@ class ItemPedidoSerializer(serializers.ModelSerializer):
 
 
 class PedisoSerializer(serializers.ModelSerializer):
-    # items_display = serializers.SerializerMethodField('get_item')
-    #itens = ItemPedidoSerializer()
+    itens = ItemPedidoSerializer(many=True)
 
     class Meta:
         model = Pedidos
         fields = ('id', 'cod_cliente', 'total_pedido', 'itens')
 
-# def get_item(self, obj):
-#    return PedisoSerializer(obj.pedido_id).data
+    def create(self, validated_data):
+        itens = validated_data.pop('itens')
+        pedido = Pedidos.objects.create(**validated_data)
+        for item in itens:
+            ItensPedido.objects.create(pedido=pedido, **item)
+        return pedido
 
